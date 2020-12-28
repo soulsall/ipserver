@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+#chkconfig: 2345 80 90
+#description: ipserver
+start() {
+  /data/software/ipserver/ipserver -qqwry \
+  /data/software/ipserver/qqwry.dat &
+  echo "done;"
+}
+
+stop() {
+  pid=`ps -aux|grep -vE 'grep|.sh|tail|cat|vi|vim'|grep ipserver|awk {'print $2'}`
+  if [[ "$pid" != "" ]];then
+     kill -9 $pid
+     echo "ipserver is stoped"
+  fi
+}
+
+case "$1" in
+  start)
+start
+;;
+  stop)
+stop
+;;
+  restart)
+stop
+start
+;;
+  *)
+echo $"Usage: $0 {start|stop|restart}"
+exit 1
+esac
